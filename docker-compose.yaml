@@ -15,11 +15,10 @@ services:
   users_service:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./dev.dockerfile
     env_file: ./.env
     volumes:
-      - .:/users_service
-    command: /app/server
+      - .:/app
     ports:
       - 8000:8000
 
