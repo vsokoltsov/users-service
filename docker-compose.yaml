@@ -21,7 +21,9 @@ services:
     env_file: ./.env
     volumes:
       - .:/users_service
-    #command: bash -c "flask run --host 0.0.0.0"
+    command: /go/src/app/server
+    ports:
+      - 8000:8000
 
 volumes:
   users_data: 
