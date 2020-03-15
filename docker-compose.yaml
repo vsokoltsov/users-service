@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  users_db:
+    container_name: users_db
+    image: postgres:11-alpine
+    env_file: ./.env
+    volumes:
+      - users_data:/var/lib/postgresql/data
+    restart: always
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+
+  users_service:
+    container_name: users_service
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file: ./.env
+    volumes:
+      - .:/users_service
+    #command: bash -c "flask run --host 0.0.0.0"
+
+volumes:
+  users_data: 
