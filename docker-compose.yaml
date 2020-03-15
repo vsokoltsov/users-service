@@ -21,7 +21,7 @@ services:
     env_file: ./.env
     volumes:
       - .:/users_service
-    command: /go/src/app/server
+    command: /app/server
     ports:
       - 8000:8000
 
