@@ -1,16 +1,13 @@
 package v1
 
 import (
-	"bytes"
 	"encoding/json"
+	"github.com/vsokoltsov/users-service/app/serializers"
 	"net/http"
 )
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var buffer bytes.Buffer
-	buffer.WriteString(`{Response: "success", Message: "users service"}`)
-	json.NewEncoder(w).Encode(buffer.String())
-	w.WriteHeader(http.StatusOK)
-	return
+	user := serializers.GetUserSerializer()
+	json.NewEncoder(w).Encode(user)
 }
