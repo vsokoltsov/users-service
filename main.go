@@ -3,10 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
-
-	"github.com/vsokoltsov/users-service/app/api"
+	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/vsokoltsov/users-service/app/api"
+	"github.com/vsokoltsov/users-service/app/utils"
 )
 
 func loggingMiddleware(next http.Handler) http.Handler {
@@ -17,6 +18,8 @@ func loggingMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
+	dbCon := os.Getenv("DB_CON")
+	utils.InitDB(dbCon)
 	router := api.InitRouter(mux.NewRouter())
 	router.Use(loggingMiddleware)
 	log.Println("Starting server on port 8000")
