@@ -5,8 +5,8 @@ create table users(
     email varchar(255) not null,
     first_name varchar,
     last_name varchar,
-    created_at timestamp,
-    updated_at timestamp
+    created_at timestamp not null default now(),
+    updated_at timestamp not null default now()
 );
 create unique index users_email on users (email);
 
