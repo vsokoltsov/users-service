@@ -7,7 +7,6 @@ import (
 
 	"github.com/vsokoltsov/users-service/app/forms"
 
-	_ "github.com/lib/pq"
 	"github.com/vsokoltsov/users-service/app/models"
 	"github.com/vsokoltsov/users-service/app/serializers"
 	"github.com/vsokoltsov/users-service/app/utils"
