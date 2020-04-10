@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/vsokoltsov/users-service/app/api"
 	"log"
 	"net/http"
+
+	"github.com/vsokoltsov/users-service/app/api"
 
 	"github.com/gorilla/mux"
 )
