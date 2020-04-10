@@ -8,4 +8,5 @@ import (
 // for the given router
 func InitNamespace(subrouter *mux.Router) {
 	subrouter.HandleFunc("/users", getUsers).Methods("GET")
+	subrouter.HandleFunc("/users", createUsers).Methods("POST")
 }

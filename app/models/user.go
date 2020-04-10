@@ -1,13 +1,17 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	_ "github.com/lib/pq"
+)
 
 // User defines a user representation
 type User struct {
-	ID         int        `db:"id"`
-	FirstName  string     `db:"first_name"`
-	LastName   string     `db:"last_name"`
-	Email      string     `db:"email"`
-	CreatedAt  time.Timer `db:"created_at"`
-	UpdateddAt time.Timer `db:"updated_at"`
+	ID         int       `db:"id"`
+	FirstName  string    `db:"first_name"`
+	LastName   string    `db:"last_name"`
+	Email      string    `db:"email"`
+	CreatedAt  time.Time `db:"created_at"`
+	UpdateddAt time.Time `db:"updated_at"`
 }
