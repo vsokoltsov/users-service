@@ -9,7 +9,7 @@ require (
 	github.com/jinzhu/gorm v1.9.12 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
-	github.com/lib/pq v1.3.0 // indirect
+	github.com/lib/pq v1.3.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/ogier/pflag v0.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
