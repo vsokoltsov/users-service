@@ -2,7 +2,6 @@ package v1
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/vsokoltsov/users-service/app/forms"
@@ -36,15 +35,16 @@ func createUsers(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.Decode(&form)
 
-	tx := utils.DB.MustBegin()
-	tx.MustExec(
-		"insert into users(first_name, last_name, email) values ($1, $2, $3)",
-		form.FirstName,
-		form.LastName,
-		form.Email,
-	)
-	err := tx.Commit()
+	user, err := form.Submit()
 	if err != nil {
-		log.Fatalln(err)
+		json.NewEncoder(w).Encode(err)
+	} else {
+		serializer := serializers.UserSerializer{
+			ID:        user.ID,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+			Email:     user.Email,
+		}
+		json.NewEncoder(w).Encode(serializer)
 	}
 }
