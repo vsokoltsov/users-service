@@ -32,3 +32,22 @@ endif
 		"dropdb --if-exists -U "${POSTGRES_USER}" "${POSTGRES_DB_TEST}" && createdb -U "${POSTGRES_USER}" "${POSTGRES_DB_TEST}""
 	docker exec -it -e APP_ENV=test -e POSTGRES_DB="${POSTGRES_DB_TEST}" users_service \
 			go test -v "${ARGS}"
+
+
+.PHONY: add_migration
+add_migration:
+	@echo "$@"
+	docker exec -it users_service /bin/bash -c \
+		"goose -dir /app/app/migrations/ postgres \"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?sslmode=${POSTGRES_SSL}\" create ${ARGS} sql"
+
+.PHONY: migrate_up
+migrate_up:
+	@echo "$@"
+	docker exec -it users_service /bin/bash -c \
+		"goose -dir /app/app/migrations/ postgres \"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?sslmode=${POSTGRES_SSL}\" up"
+
+.PHONY: migrate_down
+migrate_down:
+	@echo "$@"
+	docker exec -it users_service /bin/bash -c \
+		"goose -dir /app/app/migrations/ postgres \"postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?sslmode=${POSTGRES_SSL}\" down"
