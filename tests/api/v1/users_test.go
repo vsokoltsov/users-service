@@ -3,6 +3,7 @@ package apitests
 import (
 	"encoding/json"
 	"log"
+	"net/http"
 	"testing"
 
 	"github.com/vsokoltsov/users-service/app/models"
@@ -22,13 +23,15 @@ func TestApiUsersGetRoute(t *testing.T) {
 		"first_name": "test",
 		"last_name":  "test",
 		"email":      "test@gmail.com",
+		"password":   "password",
 	}
 	tx := utils.DB.MustBegin()
 	tx.QueryRowx(
-		"insert into users(first_name, last_name, email) values ($1, $2, $3) returning id, first_name, last_name, email",
+		"insert into users(first_name, last_name, email, password) values ($1, $2, $3, $4) returning *",
 		udata["first_name"],
 		udata["last_name"],
 		udata["email"],
+		udata["password"],
 	).StructScan(&u)
 	err := tx.Commit()
 	if err != nil {
@@ -39,6 +42,10 @@ func TestApiUsersGetRoute(t *testing.T) {
 
 	response := tests.MakeRequest("GET", "/api/v1/users")
 	json.Unmarshal(response.Body.Bytes(), &receivedUsers)
+
+	if response.Code != http.StatusOK {
+		t.Error("Response status is not success")
+	}
 
 	if len(receivedUsers) != 1 {
 		t.Error("Users list has not been received")
