@@ -6,10 +6,10 @@ import (
 	"net/http"
 
 	"github.com/vsokoltsov/users-service/app/forms"
+	"github.com/vsokoltsov/users-service/app/utils"
 
 	"github.com/vsokoltsov/users-service/app/models"
 	"github.com/vsokoltsov/users-service/app/serializers"
-	"github.com/vsokoltsov/users-service/app/utils"
 )
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
