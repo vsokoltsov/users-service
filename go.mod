@@ -14,4 +14,5 @@ require (
 	github.com/ogier/pflag v0.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pressly/goose v2.6.0+incompatible
+	gopkg.in/validator.v2 v2.0.0-20191107172027-c3144fdedc21 // indirect
 )
