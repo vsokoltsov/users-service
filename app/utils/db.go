@@ -7,7 +7,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var DB *sqlx.DB
+var (
+	DB *sqlx.DB
+)
+
+const (
+	developmentDBConString = "DB_CON"
+	testDBString           = "DB_CON_TEST"
+)
 
 // InitDB initializes db instance
 func InitDB(dataSource string) {
@@ -19,5 +26,18 @@ func InitDB(dataSource string) {
 
 	if err = DB.Ping(); err != nil {
 		log.Panic(err)
+	}
+}
+
+// GetDatabaseConnection returns name of the
+// conection string based on env variable value
+func GetDatabaseConnection(env string) string {
+	switch env {
+	case "development":
+		return developmentDBConString
+	case "test":
+		return testDBString
+	default:
+		return developmentDBConString
 	}
 }
