@@ -40,7 +40,7 @@ func TestApiUsersGetRoute(t *testing.T) {
 	}
 	var receivedUsers []models.User
 
-	response := tests.MakeRequest("GET", "/api/v1/users")
+	response := tests.MakeRequest("GET", "/api/v1/users", nil)
 	json.Unmarshal(response.Body.Bytes(), &receivedUsers)
 
 	if response.Code != http.StatusOK {

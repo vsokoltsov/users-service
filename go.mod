@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/cespare/reflex v0.2.0 // indirect
+	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/gorm v1.9.12 // indirect
@@ -14,5 +15,6 @@ require (
 	github.com/ogier/pflag v0.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pressly/goose v2.6.0+incompatible
+	golang.org/x/crypto v0.0.0-20200414173820-0848c9571904
 	gopkg.in/validator.v2 v2.0.0-20191107172027-c3144fdedc21 // indirect
 )

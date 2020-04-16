@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"bytes"
 	"database/sql"
 	"log"
 	"net/http"
@@ -14,10 +15,12 @@ import (
 
 const migrationsPath = "/app/app/migrations/"
 
+// AppInstance saves App struct into variable for testing purposes
 var AppInstance app.App
 
-func MakeRequest(verb string, path string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(verb, path, nil)
+// MakeRequest performs test request on the application's routes
+func MakeRequest(verb string, path string, params *bytes.Buffer) *httptest.ResponseRecorder {
+	req, _ := http.NewRequest(verb, path, params)
 	rr := httptest.NewRecorder()
 	AppInstance.Router.ServeHTTP(rr, req)
 	return rr
