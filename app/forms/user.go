@@ -1,6 +1,8 @@
 package forms
 
 import (
+	"reflect"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/vsokoltsov/users-service/app/models"
 	"github.com/vsokoltsov/users-service/app/utils"
@@ -11,25 +13,55 @@ import (
 type UserForm struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-	Email     string `json:"email" validate:"email,required"`
-	Password  string `validate:"email,required"`
+	Email     string `json:"email" validate:"required,email"`
+	Password  string `validate:"required"`
 }
 
-func (uf *UserForm) validate() error {
+func (uf *UserForm) validate() map[string][]string {
 	var (
-		validator = validator.New()
+		valid   = validator.New()
+		errsMap = make(map[string][]string)
 	)
-	err := validator.Struct(uf)
-	return err
+	fieldValues, fieldTags := getFieldsWithValues(uf)
+	for key, value := range fieldValues {
+		tag := fieldTags[key]
+		ferr := valid.Var(value, tag.(string))
+		if ferr != nil {
+			var errStrings []string
+			errsData := ferr.(validator.ValidationErrors)
+			for _, errItem := range errsData {
+				errStrings = append(errStrings, errItem.Tag())
+			}
+			errsMap[key] = errStrings
+		}
+	}
+	return errsMap
+}
+
+func getFieldsWithValues(uf *UserForm) (map[string]interface{}, map[string]interface{}) {
+	var (
+		fieldValue = make(map[string]interface{})
+		fieldTag   = make(map[string]interface{})
+	)
+	rfields := reflect.TypeOf(*uf)
+	rvalues := reflect.ValueOf(uf).Elem()
+	for i := 0; i < rfields.NumField(); i++ {
+		field := rfields.Field(i)
+		value := rvalues.Field(i)
+		tag := field.Tag.Get("validate")
+		fieldValue[field.Name] = value.Interface()
+		fieldTag[field.Name] = tag
+	}
+	return fieldValue, fieldTag
 }
 
 // Submit perform saving of users data
-func (uf *UserForm) Submit() (*models.User, error) {
+func (uf *UserForm) Submit() (*models.User, *map[string][]string) {
 	var user = models.User{}
 	validationError := uf.validate()
 
-	if validationError != nil {
-		return &user, validationError
+	if len(validationError) > 0 {
+		return &user, &validationError
 	}
 	user.SetPassword(uf.Password)
 	tx := utils.DB.MustBegin()
@@ -42,7 +74,9 @@ func (uf *UserForm) Submit() (*models.User, error) {
 	).StructScan(&user)
 	err := tx.Commit()
 	if err != nil {
-		return nil, err
+		return nil, &map[string][]string{
+			"user": []string{err.Error()},
+		}
 	}
 	return &user, nil
 }
