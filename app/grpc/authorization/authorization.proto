@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package authorization;
+option go_package = ".;authorization";
+option cc_generic_services = true;
+option java_generic_services = true;
+option py_generic_services = true;
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.helloworld";
+option java_outer_classname = "HelloWorldProto";
+
+service AuthorizationService {
+    rpc get_user_id (TokenRequest) returns (UserIdResponse) {}
+}
+
+message UserIdResponse {
+    int64 userID = 1;
+}
+
+message TokenRequest {
+    string token = 1;
+}
