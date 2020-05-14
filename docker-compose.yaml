@@ -17,7 +17,7 @@ services:
     container_name: users_service
     build:
       context: .
-      dockerfile: ./dev.dockerfile
+      dockerfile: ./Dockerfile
     env_file: ./.env
     environment:
       - DB_CON=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?sslmode=${POSTGRES_SSL}
