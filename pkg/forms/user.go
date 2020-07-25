@@ -1,9 +1,6 @@
 package forms
 
 import (
-	"reflect"
-
-	"github.com/go-playground/validator/v10"
 	"github.com/vsokoltsov/users-service/pkg/models"
 	"github.com/vsokoltsov/users-service/pkg/utils"
 )
@@ -17,53 +14,25 @@ type UserForm struct {
 	Password  string `validate:"required"`
 }
 
+// validate call default form validation method
 func (uf *UserForm) validate() map[string][]string {
-	var (
-		valid   = validator.New()
-		errsMap = make(map[string][]string)
-	)
-	fieldValues, fieldTags := getFieldsWithValues(uf)
-	for key, value := range fieldValues {
-		tag := fieldTags[key]
-		ferr := valid.Var(value, tag.(string))
-		if ferr != nil {
-			var errStrings []string
-			errsData := ferr.(validator.ValidationErrors)
-			for _, errItem := range errsData {
-				errStrings = append(errStrings, errItem.Tag())
-			}
-			errsMap[key] = errStrings
-		}
-	}
-	return errsMap
-}
-
-func getFieldsWithValues(uf *UserForm) (map[string]interface{}, map[string]interface{}) {
-	var (
-		fieldValue = make(map[string]interface{})
-		fieldTag   = make(map[string]interface{})
-	)
-	rfields := reflect.TypeOf(*uf)
-	rvalues := reflect.ValueOf(uf).Elem()
-	for i := 0; i < rfields.NumField(); i++ {
-		field := rfields.Field(i)
-		value := rvalues.Field(i)
-		tag := field.Tag.Get("validate")
-		fieldValue[field.Name] = value.Interface()
-		fieldTag[field.Name] = tag
-	}
-	return fieldValue, fieldTag
+	return DefaultFormValidation(uf)
 }
 
 // Submit perform saving of users data
-func (uf *UserForm) Submit() (*models.User, *map[string][]string) {
-	var user = models.User{}
-	validationError := uf.validate()
+func (uf *UserForm) Submit() (models.DBModel, *map[string][]string) {
+	var (
+		user            = models.User{}
+		validationError = uf.validate()
+	)
 
+	// If validation has failed
 	if len(validationError) > 0 {
 		return &user, &validationError
 	}
 	user.SetPassword(uf.Password)
+
+	// Add new user to database
 	tx := utils.DB.MustBegin()
 	tx.QueryRowx(
 		"insert into users(first_name, last_name, email, password) values ($1, $2, $3, $4) returning *",
@@ -72,11 +41,13 @@ func (uf *UserForm) Submit() (*models.User, *map[string][]string) {
 		uf.Email,
 		user.Password,
 	).StructScan(&user)
+
+	// If adding failed - return errors
 	err := tx.Commit()
 	if err != nil {
 		return nil, &map[string][]string{
 			"user": []string{err.Error()},
 		}
 	}
-	return &user, nil
+	return user, nil
 }
