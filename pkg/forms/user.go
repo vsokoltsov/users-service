@@ -4,8 +4,8 @@ import (
 	"reflect"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/vsokoltsov/users-service/app/models"
-	"github.com/vsokoltsov/users-service/app/utils"
+	"github.com/vsokoltsov/users-service/pkg/models"
+	"github.com/vsokoltsov/users-service/pkg/utils"
 )
 
 // UserForm represents user

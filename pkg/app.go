@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/vsokoltsov/users-service/app/api"
-	"github.com/vsokoltsov/users-service/app/utils"
+	"github.com/vsokoltsov/users-service/pkg/api"
+	"github.com/vsokoltsov/users-service/pkg/utils"
 )
 
 // App represents application

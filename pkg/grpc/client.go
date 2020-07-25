@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/vsokoltsov/users-service/app/grpc/authorization"
+	"github.com/vsokoltsov/users-service/pkg/grpc/authorization"
 	"google.golang.org/grpc"
 )
 

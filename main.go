@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/vsokoltsov/users-service/app"
+	app "github.com/vsokoltsov/users-service/pkg"
 )
 
 func main() {
