@@ -1,6 +1,10 @@
 package serializers
 
-import "time"
+import (
+	"time"
+
+	"github.com/vsokoltsov/users-service/pkg/models"
+)
 
 // UserSerializer serializes users struct to json
 type UserSerializer struct {
@@ -12,6 +16,12 @@ type UserSerializer struct {
 }
 
 // GetUserSerializer generates serializer for user model
-func GetUserSerializer() UserSerializer {
-	return UserSerializer{}
+func GetUserSerializer(user models.User) UserSerializer {
+	return UserSerializer{
+		ID:        user.ID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+	}
 }

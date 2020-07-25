@@ -17,13 +17,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	utils.DB.Select(&users, "SELECT * FROM users")
 	for _, user := range users {
-		serializedUsers = append(serializedUsers, serializers.UserSerializer{
-			ID:        user.ID,
-			FirstName: user.FirstName,
-			LastName:  user.LastName,
-			Email:     user.Email,
-			CreatedAt: user.CreatedAt,
-		})
+		serializedUsers = append(serializedUsers, serializers.GetUserSerializer(user))
 	}
 	json.NewEncoder(w).Encode(serializedUsers)
 }
@@ -39,12 +33,7 @@ func createUsers(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	} else {
-		serializer := serializers.UserSerializer{
-			ID:        user.ID,
-			FirstName: user.FirstName,
-			LastName:  user.LastName,
-			Email:     user.Email,
-		}
+		serializer := serializers.GetUserSerializer(user.(models.User))
 		json.NewEncoder(w).Encode(serializer)
 	}
 }
