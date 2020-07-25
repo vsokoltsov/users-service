@@ -3,7 +3,6 @@ package tests
 import (
 	"bytes"
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -26,7 +25,6 @@ func MakeRequest(verb string, path string, params *bytes.Buffer) *httptest.Respo
 	if params == nil {
 		body = bytes.NewBuffer([]byte{})
 	}
-	fmt.Println("PARAMS ARE ", body)
 	req, _ := http.NewRequest(verb, path, body)
 	rr := httptest.NewRecorder()
 	AppInstance.Router.ServeHTTP(rr, req)

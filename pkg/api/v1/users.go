@@ -31,8 +31,10 @@ func createUsers(w http.ResponseWriter, r *http.Request) {
 
 	user, err := form.Submit()
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(err)
 	} else {
+		w.WriteHeader(http.StatusCreated)
 		serializer := serializers.GetUserSerializer(user.(models.User))
 		json.NewEncoder(w).Encode(serializer)
 	}

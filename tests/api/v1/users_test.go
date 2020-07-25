@@ -1,6 +1,7 @@
 package apitests
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -52,5 +53,60 @@ func TestApiUsersGetRoute(t *testing.T) {
 	}
 	if u.ID != receivedUsers[0].ID {
 		t.Error("Users do not match")
+	}
+}
+
+// Test POST /api/v1/users - success user creation
+func TestSuccessUserCreation(t *testing.T) {
+	var (
+		params = []byte(`{
+		"email": "test@mail.com", 
+		"first_name": "test", 
+		"last_name": "test", 
+		"password": "password"
+	}`)
+		usersCount            int
+		usersCountAfterCreate int
+	)
+	err := utils.DB.Get(&usersCount, "select count(*) from users")
+	if err != nil {
+		t.Error("Cannot get a user's count: ", err)
+	}
+	response := tests.MakeRequest("POST", "/api/v1/users", bytes.NewBuffer(params))
+
+	if response.Code != http.StatusCreated {
+		t.Error("Response status is not success")
+	}
+	createErr := utils.DB.Get(&usersCountAfterCreate, "select count(*) from users")
+	if createErr != nil {
+		t.Error("Cannot get a user's count after create: ", createErr)
+	}
+	if usersCountAfterCreate != usersCount+1 {
+		t.Error("POST /api/v1/users failed: Number of users does not increased")
+	}
+}
+
+// Test POST /api/v1/users - failed user creation
+func TestFailedUserCreation(t *testing.T) {
+	var (
+		params                = []byte(`{}`)
+		usersCount            int
+		usersCountAfterCreate int
+	)
+	err := utils.DB.Get(&usersCount, "select count(*) from users")
+	if err != nil {
+		t.Error("Cannot get a user's count: ", err)
+	}
+	response := tests.MakeRequest("POST", "/api/v1/users", bytes.NewBuffer(params))
+	if response.Code != http.StatusBadRequest {
+		t.Error("Response status is not 'Bad Request'")
+	}
+
+	createErr := utils.DB.Get(&usersCountAfterCreate, "select count(*) from users")
+	if createErr != nil {
+		t.Error("Cannot get a user's count after create: ", createErr)
+	}
+	if usersCountAfterCreate != usersCount {
+		t.Error("POST /api/v1/users failed: Number of users has changed")
 	}
 }
