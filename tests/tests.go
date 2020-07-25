@@ -11,10 +11,11 @@ import (
 	"testing"
 
 	"github.com/pressly/goose"
-	"github.com/vsokoltsov/users-service/app"
+	app "github.com/vsokoltsov/users-service/pkg"
+	"github.com/vsokoltsov/users-service/pkg/utils"
 )
 
-const migrationsPath = "/app/app/migrations/"
+const migrationsPath = "/app/pkg/migrations/"
 
 // AppInstance saves App struct into variable for testing purposes
 var AppInstance app.App
@@ -32,6 +33,13 @@ func MakeRequest(verb string, path string, params *bytes.Buffer) *httptest.Respo
 	return rr
 }
 
+// // clearDB deletes all the created records from database
+func clearDB() {
+	tx := utils.DB.MustBegin()
+	tx.MustExec("delete from users")
+	tx.Commit()
+}
+
 // TestMain shows defaults TestMain for test
 func TestMain(m *testing.M) {
 	appEnv := os.Getenv("APP_ENV")
@@ -43,6 +51,8 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	clearDB()
+	defer clearDB()
 	defer db.Close()
 
 	errDB := goose.Run("up", db, migrationsPath)

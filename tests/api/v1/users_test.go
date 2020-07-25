@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/vsokoltsov/users-service/app/models"
-	"github.com/vsokoltsov/users-service/app/utils"
+	"github.com/vsokoltsov/users-service/pkg/models"
+	"github.com/vsokoltsov/users-service/pkg/utils"
 	"github.com/vsokoltsov/users-service/tests"
 )
 

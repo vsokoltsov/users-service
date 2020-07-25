@@ -4,8 +4,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/vsokoltsov/users-service/app/forms"
-	"github.com/vsokoltsov/users-service/app/utils"
+	"github.com/vsokoltsov/users-service/pkg/forms"
+	"github.com/vsokoltsov/users-service/pkg/utils"
 	"github.com/vsokoltsov/users-service/tests"
 )
 
@@ -36,7 +36,7 @@ func TestSuccessUserCreation(t *testing.T) {
 	usersCount := getUsersCount()
 	_, err := form.Submit()
 	if err != nil {
-		t.Error("Error appeared after creating user")
+		t.Error("Error appeared after creating user: ", err)
 	}
 	createdUsersCount := getUsersCount()
 	if createdUsersCount != usersCount+1 {
@@ -53,7 +53,7 @@ func TestFailedUserCreation(t *testing.T) {
 	usersCount := getUsersCount()
 	_, err := form.Submit()
 	if err == nil {
-		t.Error("Error was not appeared when it should")
+		t.Error("Error was not appeared when it should: ", err)
 	}
 	createdUsersCount := getUsersCount()
 	if createdUsersCount != usersCount {
