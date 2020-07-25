@@ -26,7 +26,7 @@ shell:
 test:
 ifndef $(ARGS)
 	@echo 'no ARGS around'
-	$(eval ARGS := "./...")
+	$(eval ARGS := "./tests/...")
 endif
 	docker exec -it users_db /bin/sh -c \
 		"dropdb --if-exists -U "${POSTGRES_USER}" "${POSTGRES_DB_TEST}" && createdb -U "${POSTGRES_USER}" "${POSTGRES_DB_TEST}""
