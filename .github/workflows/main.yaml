@@ -20,7 +20,9 @@ jobs:
           echo "POSTGRES_HOST=users_db" >> .env
           echo "POSTGRES_SSL=disable" >> .env
       - name: Build the docker-compose stack
-        run: docker-compose up -d
+        run: |
+          source ./.env
+          docker-compose up -d
       - name: Test
         run: |
           source ./.env
