@@ -21,20 +21,13 @@ jobs:
           echo "POSTGRES_SSL=disable" >> .env
       - name: Build the docker-compose stack
         run: |
-          source ./.env
+          source .env
+          env
           docker-compose up -d
       - name: Test
         run: |
-          source ./.env
-          docker ps -a
-          sleep 10
-          docker ps -a
-          sleep 30
-          echo "USERS SERVICE LOGs"
-          docker logs users_service
-          echo "DB LOGS"
-          docker logs users_db
-          sleep 10
+          source .env
+          env
           docker exec users_db /bin/sh -c "dropdb --if-exists -U $POSTGRES_USER $POSTGRES_DB_TEST && createdb -U $POSTGRES_USER $POSTGRES_DB_TEST"
           docker exec -e APP_ENV=test -e POSTGRES_DB=$POSTGRES_DB_TEST users_service go test -v ./tests/...
           # docker ps -a
