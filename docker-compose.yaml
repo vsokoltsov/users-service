@@ -22,9 +22,9 @@ services:
     environment:
       - DB_CON=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?sslmode=${POSTGRES_SSL}
       - DB_CON_TEST=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB_TEST}?sslmode=${POSTGRES_SSL}
-    command: reflex -c ./reflex.conf
     volumes:
       - .:/app
+    command: reflex -c /app/reflex.conf
     ports:
       - 8000:8000
     networks:

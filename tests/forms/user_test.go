@@ -39,6 +39,7 @@ func TestSuccessUserCreation(t *testing.T) {
 		t.Error("Error appeared after creating user: ", err)
 	}
 	createdUsersCount := getUsersCount()
+	t.Log(createdUsersCount, usersCount)
 	if createdUsersCount != usersCount+1 {
 		t.Error("User was not saved")
 	}
@@ -56,6 +57,7 @@ func TestFailedUserCreation(t *testing.T) {
 		t.Error("Error was not appeared when it should: ", err)
 	}
 	createdUsersCount := getUsersCount()
+	t.Log(createdUsersCount, usersCount)
 	if createdUsersCount != usersCount {
 		t.Error("Number of users dos not match after failed saving")
 	}
