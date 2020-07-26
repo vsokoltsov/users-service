@@ -12,7 +12,7 @@ RUN go get github.com/cespare/reflex && \
 # Base app image
 FROM golang:1.13-alpine
 
-RUN apk add protobuf
+RUN apk add protobuf gcc
 COPY --from=binaries /go/bin /go/bin
 WORKDIR /app
 COPY . .
