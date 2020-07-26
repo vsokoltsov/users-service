@@ -26,7 +26,4 @@ jobs:
       - name: Build the docker-compose stack
         run: docker-compose up -d
       - name: Test
-        run: |
-          docker exec -it users_db /bin/sh -c \
-            "dropdb --if-exists -U "${POSTGRES_USER}" "${POSTGRES_DB_TEST}" && createdb -U "${POSTGRES_USER}" "${POSTGRES_DB_TEST}""
-          docker exec -it -e APP_ENV=test -e POSTGRES_DB="${POSTGRES_DB_TEST}" users_service go test -v ./tests/...
+        run: make test
