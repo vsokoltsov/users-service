@@ -49,14 +49,15 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	clearDB()
-	defer clearDB()
 	defer db.Close()
 
 	errDB := goose.Run("up", db, migrationsPath)
 	if errDB != nil {
-		log.Fatal(errDB)
+		log.Fatal("Error of migration appplying for tests", errDB)
 	}
+	clearDB()
+	defer clearDB()
+
 	exitVal := m.Run()
 	os.Exit(exitVal)
 }

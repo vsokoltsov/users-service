@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    # working_directory: /go/src/github.com/teamreel/users-service
+    steps:
+      - checkout
+
+      # specify any bash command here prefixed with `run: `
+      - run: |
+          curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+          chmod +x ~/docker-compose
+          sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run: |
+          touch .env
+          echo "POSTGRES_USER=usersadmin" >> .env
+          echo "POSTGRES_PASSWORD=usersadmin" >> .env
+          echo "POSTGRES_DB=users-service" >> .env
+          echo "POSTGRES_DB_TEST=users-service-test" >> .env
+          echo "POSTGRES_HOST=users_db" >> .env
+          echo "POSTGRES_SSL=disable" >> .env
+      - run: |
+          source .env
+          env
+          docker-compose up -d
+      - run: |
+          touch .env
+          echo "POSTGRES_USER=usersadmin" >> .env
+          echo "POSTGRES_PASSWORD=usersadmin" >> .env
+          echo "POSTGRES_DB=users-service" >> .env
+          echo "POSTGRES_DB_TEST=users-service-test" >> .env
+          echo "POSTGRES_HOST=users_db" >> .env
+          echo "POSTGRES_SSL=disable" >> .env
+          source .env
+          env
+          docker ps -a
+          docker exec users_db /bin/sh -c "dropdb --if-exists -U $POSTGRES_USER $POSTGRES_DB_TEST && createdb -U $POSTGRES_USER $POSTGRES_DB_TEST"
+          docker exec -it -e APP_ENV=test -e POSTGRES_DB=$POSTGRES_DB_TEST users_service go test -v ./tests/...
+          docker ps -a

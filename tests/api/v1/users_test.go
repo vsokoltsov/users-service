@@ -57,7 +57,7 @@ func TestApiUsersGetRoute(t *testing.T) {
 }
 
 // Test POST /api/v1/users - success user creation
-func TestSuccessUserCreation(t *testing.T) {
+func TestApiSuccessUserCreation(t *testing.T) {
 	var (
 		params = []byte(`{
 		"email": "test@mail.com", 
@@ -81,13 +81,14 @@ func TestSuccessUserCreation(t *testing.T) {
 	if createErr != nil {
 		t.Error("Cannot get a user's count after create: ", createErr)
 	}
+	t.Log(usersCountAfterCreate, usersCount)
 	if usersCountAfterCreate != usersCount+1 {
 		t.Error("POST /api/v1/users failed: Number of users does not increased")
 	}
 }
 
 // Test POST /api/v1/users - failed user creation
-func TestFailedUserCreation(t *testing.T) {
+func TestApiFailedUserCreation(t *testing.T) {
 	var (
 		params                = []byte(`{}`)
 		usersCount            int
@@ -98,6 +99,7 @@ func TestFailedUserCreation(t *testing.T) {
 		t.Error("Cannot get a user's count: ", err)
 	}
 	response := tests.MakeRequest("POST", "/api/v1/users", bytes.NewBuffer(params))
+
 	if response.Code != http.StatusBadRequest {
 		t.Error("Response status is not 'Bad Request'")
 	}
@@ -106,6 +108,7 @@ func TestFailedUserCreation(t *testing.T) {
 	if createErr != nil {
 		t.Error("Cannot get a user's count after create: ", createErr)
 	}
+	t.Log(usersCountAfterCreate, usersCount)
 	if usersCountAfterCreate != usersCount {
 		t.Error("POST /api/v1/users failed: Number of users has changed")
 	}
