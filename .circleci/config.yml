@@ -23,5 +23,6 @@ jobs:
           echo "POSTGRES_SSL=disable" >> .env
       - run: docker-compose up -d
       - run: |
-          echo $(docker ps -a)
+          docker ps -a
           docker exec -it -e APP_ENV=test -e POSTGRES_DB=$POSTGRES_DB_TEST users_service go test -v ./tests/...
+          docker ps -a
