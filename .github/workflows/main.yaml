@@ -31,7 +31,10 @@ jobs:
           docker ps -a
           sleep 10
           docker ps -a
+          sleep 30
+          echo "USERS SERVICE LOGs"
           docker logs users_service
+          echo "DB LOGS"
           docker logs users_db
           # docker exec users_service go test -v ./tests/...
           # docker ps -a
