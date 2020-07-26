@@ -1,13 +1,18 @@
 version: 2
 jobs:
   build:
-    machine: true
+    docker:
+      - image: circleci/golang:1.13
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
 
       # specify any bash command here prefixed with `run: `
-      - run: pip install docker-compose==1.15.0
+      - run: |
+          set -x
+          curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+      - setup_remote_docker
       - run: |
           touch .env
           echo "POSTGRES_USER=usersadmin" >> .env
