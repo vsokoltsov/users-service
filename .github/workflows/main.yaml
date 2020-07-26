@@ -36,5 +36,6 @@ jobs:
           docker logs users_service
           echo "DB LOGS"
           docker logs users_db
-          # docker exec users_service go test -v ./tests/...
+          sleep 10
+          docker exec users_service go test -v ./tests/...
           # docker ps -a
