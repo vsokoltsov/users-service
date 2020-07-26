@@ -10,7 +10,12 @@ jobs:
     name: Build
     steps:
       - uses: actions/checkout@master
-      - name: Populate .env file
+      - name: Build the docker-compose stack
+        run: |
+          source .env
+          env
+          docker-compose up -d
+      - name: Test
         run: |
           touch .env
           echo "POSTGRES_USER=usersadmin" >> .env
@@ -19,13 +24,6 @@ jobs:
           echo "POSTGRES_DB_TEST=users-service-test" >> .env
           echo "POSTGRES_HOST=users_db" >> .env
           echo "POSTGRES_SSL=disable" >> .env
-      - name: Build the docker-compose stack
-        run: |
-          source .env
-          env
-          docker-compose up -d
-      - name: Test
-        run: |
           source .env
           env
           docker exec users_db /bin/sh -c "dropdb --if-exists -U $POSTGRES_USER $POSTGRES_DB_TEST && createdb -U $POSTGRES_USER $POSTGRES_DB_TEST"
