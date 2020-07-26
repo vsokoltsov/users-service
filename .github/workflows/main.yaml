@@ -1,3 +1,5 @@
+name: Tests
+
 on:
   pull_request:
     branches: [ master ]
@@ -27,4 +29,4 @@ jobs:
         run: |
           source ./.env
           docker exec users_db /bin/sh -c "createdb -U $POSTGRES_USER $POSTGRES_DB_TEST"
-          docker exec -e APP_ENV=test -e POSTGRES_DB="$POSTGRES_DB_TEST" users_service go test -v ./tests/...
+          docker exec -e APP_ENV=test -e POSTGRES_DB=$POSTGRES_DB_TEST users_service go test -v ./tests/...
