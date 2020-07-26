@@ -28,5 +28,5 @@ jobs:
       - name: Test
         run: |
           source ./.env
-          docker exec users_db /bin/sh -c "createdb -U $POSTGRES_USER $POSTGRES_DB_TEST"
+          docker exec users_db /bin/sh -c "dropdb --if-exists -U $POSTGRES_USER $POSTGRES_DB_TEST && createdb -U $POSTGRES_USER $POSTGRES_DB_TEST"
           docker exec -e APP_ENV=test -e POSTGRES_DB=$POSTGRES_DB_TEST users_service go test -v ./tests/...

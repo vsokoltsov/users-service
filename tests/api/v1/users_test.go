@@ -81,7 +81,6 @@ func TestSuccessUserCreation(t *testing.T) {
 	if createErr != nil {
 		t.Error("Cannot get a user's count after create: ", createErr)
 	}
-	t.Log(usersCount, usersCountAfterCreate)
 	if usersCountAfterCreate != usersCount+1 {
 		t.Error("POST /api/v1/users failed: Number of users does not increased")
 	}
@@ -108,7 +107,6 @@ func TestFailedUserCreation(t *testing.T) {
 	if createErr != nil {
 		t.Error("Cannot get a user's count after create: ", createErr)
 	}
-	t.Log(usersCount, usersCountAfterCreate)
 	if usersCountAfterCreate != usersCount {
 		t.Error("POST /api/v1/users failed: Number of users has changed")
 	}
