@@ -29,5 +29,9 @@ jobs:
         run: |
           source ./.env
           docker ps -a
-          docker exec users_service go test -v ./tests/...
+          sleep 10
           docker ps -a
+          docker logs users_service
+          docker logs users_db
+          # docker exec users_service go test -v ./tests/...
+          # docker ps -a
