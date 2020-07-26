@@ -81,6 +81,7 @@ func TestSuccessUserCreation(t *testing.T) {
 	if createErr != nil {
 		t.Error("Cannot get a user's count after create: ", createErr)
 	}
+	t.Log(usersCount, usersCountAfterCreate)
 	if usersCountAfterCreate != usersCount+1 {
 		t.Error("POST /api/v1/users failed: Number of users does not increased")
 	}
@@ -98,6 +99,7 @@ func TestFailedUserCreation(t *testing.T) {
 		t.Error("Cannot get a user's count: ", err)
 	}
 	response := tests.MakeRequest("POST", "/api/v1/users", bytes.NewBuffer(params))
+
 	if response.Code != http.StatusBadRequest {
 		t.Error("Response status is not 'Bad Request'")
 	}
@@ -106,6 +108,7 @@ func TestFailedUserCreation(t *testing.T) {
 	if createErr != nil {
 		t.Error("Cannot get a user's count after create: ", createErr)
 	}
+	t.Log(usersCount, usersCountAfterCreate)
 	if usersCountAfterCreate != usersCount {
 		t.Error("POST /api/v1/users failed: Number of users has changed")
 	}
